@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="RestSharp" Version="110.2.1-alpha.0.3" />
+      <PackageReference Include="RestSharp.Serializers.NewtonsoftJson" Version="110.2.1-alpha.0.3" />
+      <PackageReference Include="RestSharp.Serializers.SystemTextJson" Version="106.15.1-alpha.0.1" />
+      <PackageReference Include="System.Xml.XmlSerializer" Version="4.3.0" />
+    </ItemGroup>
+
+</Project>
