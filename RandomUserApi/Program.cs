@@ -35,6 +35,9 @@ class Program
                     user.Age = random.Next(18, 66);
                 }
 
+                // Ordina la lista degli utenti per nome
+                userResponse.Results = userResponse.Results.OrderBy(u => u.Name.First).ToList();
+
                 // Stampa i dati di ciascun utente
                 int index = 0;
                 foreach (User user in userResponse.Results)
