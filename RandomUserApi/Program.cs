@@ -54,13 +54,7 @@ class Program
                     Console.WriteLine($"Numero di telefono: {selectedUser.Phone}");
                     Console.WriteLine($"Immagine: {selectedUser.Picture.Large}");
 
-                    // Aggiungi il conteggio delle statistiche sulle nazioni
-                    Dictionary<string, int> countryStats = GetCountryStatistics(userResponse.Results);
-                    Console.WriteLine("Statistiche sulle nazioni:");
-                    foreach (var country in countryStats)
-                    {
-                        Console.WriteLine($"{country.Key}: {country.Value}");
-                    }
+                    GetAdditionalStatistics(userResponse.Results);
                 }
                 else
                 {
@@ -74,25 +68,51 @@ class Program
         }
     }
 
-    static Dictionary<string, int> GetCountryStatistics(List<User> users)
+    static void GetAdditionalStatistics(List<User> users)
     {
-        Dictionary<string, int> countryStats = new Dictionary<string, int>();
+        // Statistiche sulle nazioni
+        Dictionary<string, int> countryStatistics = new Dictionary<string, int>();
+
+        // Statistiche aggiuntive
+        int totalAge = 0;
+        int maleCount = 0;
+        int femaleCount = 0;
 
         foreach (User user in users)
         {
-            string country = user.Location.Country;
+            totalAge += user.Age;
 
-            if (countryStats.ContainsKey(country))
+            if (user.Gender == "male")
             {
-                countryStats[country]++;
+                maleCount++;
+            }
+            else if (user.Gender == "female")
+            {
+                femaleCount++;
+            }
+
+            if (countryStatistics.ContainsKey(user.Location.Country))
+            {
+                countryStatistics[user.Location.Country]++;
             }
             else
             {
-                countryStats[country] = 1;
+                countryStatistics[user.Location.Country] = 1;
             }
         }
 
-        return countryStats;
+        double averageAge = (double)totalAge / users.Count;
+
+        Console.WriteLine("Statistiche aggiuntive:");
+        Console.WriteLine($"Età media degli utenti: {averageAge}");
+        Console.WriteLine($"Numero di utenti maschi: {maleCount}");
+        Console.WriteLine($"Numero di utenti femmine: {femaleCount}");
+        Console.WriteLine("Statistiche sulle nazioni:");
+
+        foreach (var entry in countryStatistics)
+        {
+            Console.WriteLine($"{entry.Key}: {entry.Value}");
+        }
     }
 }
 
@@ -108,6 +128,8 @@ public class User
     public UserLocation Location { get; set; }
     public string Phone { get; set; }
     public UserPicture Picture { get; set; }
+    public int Age { get; set; }
+    public string Gender { get; set; }
 }
 
 public class UserName
