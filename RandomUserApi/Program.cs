@@ -50,10 +50,14 @@ class Program
                     Console.WriteLine("-----------------------------");
                 }
 
-                Console.Write("Seleziona un utente per visualizzare ulteriori dettagli (inserisci l'indice): ");
+                Console.Write("Seleziona un utente per visualizzare ulteriori dettagli (inserisci l'indice) o 0 per uscire: ");
                 int selectedUserIndex = int.Parse(Console.ReadLine());
 
-                if (selectedUserIndex >= 1 && selectedUserIndex <= userResponse.Results.Count)
+                if (selectedUserIndex == 0)
+                {
+                    return;
+                }
+                else if (selectedUserIndex >= 1 && selectedUserIndex <= userResponse.Results.Count)
                 {
                     User selectedUser = userResponse.Results[selectedUserIndex - 1];
 
@@ -65,8 +69,6 @@ class Program
                     Console.WriteLine($"Età: {selectedUser.Age}");
                     Console.WriteLine($"Immagine: {selectedUser.Picture.Large}");
 
-                    GetAdditionalStatistics(userResponse.Results);
-
                     Console.Write("Vuoi salvare i dati dell'utente su file? (S/N): ");
                     string responseSave = Console.ReadLine();
 
@@ -75,6 +77,14 @@ class Program
                         string fileName = $"{selectedUser.Name.First}_{selectedUser.Name.Last}.txt";
                         string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
                         SaveUserToFile(selectedUser, filePath);
+                    }
+
+                    Console.Write("Vuoi visualizzare le statistiche aggiuntive? (S/N): ");
+                    string responseStats = Console.ReadLine();
+
+                    if (responseStats.ToUpper() == "S")
+                    {
+                        GetAdditionalStatistics(userResponse.Results);
                     }
                 }
                 else
