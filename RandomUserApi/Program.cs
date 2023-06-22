@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -54,21 +54,13 @@ class Program
                     Console.WriteLine($"Numero di telefono: {selectedUser.Phone}");
                     Console.WriteLine($"Immagine: {selectedUser.Picture.Large}");
 
-                    // Salvataggio dei dati dell'utente in un file
-                    string fileName = $"user_{selectedUserIndex}.txt";
-                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
-
-                    using (StreamWriter writer = new StreamWriter(filePath))
+                    // Aggiungi il conteggio delle statistiche sulle nazioni
+                    Dictionary<string, int> countryStats = GetCountryStatistics(userResponse.Results);
+                    Console.WriteLine("Statistiche sulle nazioni:");
+                    foreach (var country in countryStats)
                     {
-                        writer.WriteLine($"Nome completo: {selectedUser.Name.First} {selectedUser.Name.Last}");
-                        writer.WriteLine($"Email: {selectedUser.Email}");
-                        writer.WriteLine($"Nazione: {selectedUser.Location.Country}");
-                        writer.WriteLine($"Numero di telefono: {selectedUser.Phone}");
-                        writer.WriteLine($"Immagine: {selectedUser.Picture.Large}");
-                        // Aggiungi altri dettagli a tua scelta
+                        Console.WriteLine($"{country.Key}: {country.Value}");
                     }
-
-                    Console.WriteLine($"Dati salvati correttamente in {filePath}");
                 }
                 else
                 {
@@ -80,6 +72,27 @@ class Program
                 Console.WriteLine("Errore durante la richiesta API: " + response.ReasonPhrase);
             }
         }
+    }
+
+    static Dictionary<string, int> GetCountryStatistics(List<User> users)
+    {
+        Dictionary<string, int> countryStats = new Dictionary<string, int>();
+
+        foreach (User user in users)
+        {
+            string country = user.Location.Country;
+
+            if (countryStats.ContainsKey(country))
+            {
+                countryStats[country]++;
+            }
+            else
+            {
+                countryStats[country] = 1;
+            }
+        }
+
+        return countryStats;
     }
 }
 
