@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -52,7 +53,22 @@ class Program
                     Console.WriteLine($"Nazione: {selectedUser.Location.Country}");
                     Console.WriteLine($"Numero di telefono: {selectedUser.Phone}");
                     Console.WriteLine($"Immagine: {selectedUser.Picture.Large}");
-                    // Aggiungi altri dettagli a tua scelta
+
+                    // Salvataggio dei dati dell'utente in un file
+                    string fileName = $"user_{selectedUserIndex}.txt";
+                    string filePath = Path.Combine(Directory.GetCurrentDirectory(), fileName);
+
+                    using (StreamWriter writer = new StreamWriter(filePath))
+                    {
+                        writer.WriteLine($"Nome completo: {selectedUser.Name.First} {selectedUser.Name.Last}");
+                        writer.WriteLine($"Email: {selectedUser.Email}");
+                        writer.WriteLine($"Nazione: {selectedUser.Location.Country}");
+                        writer.WriteLine($"Numero di telefono: {selectedUser.Phone}");
+                        writer.WriteLine($"Immagine: {selectedUser.Picture.Large}");
+                        // Aggiungi altri dettagli a tua scelta
+                    }
+
+                    Console.WriteLine($"Dati salvati correttamente in {filePath}");
                 }
                 else
                 {
@@ -96,5 +112,3 @@ public class UserPicture
 {
     public string Large { get; set; }
 }
-
-   
