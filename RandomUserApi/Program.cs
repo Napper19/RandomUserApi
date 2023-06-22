@@ -27,6 +27,14 @@ class Program
                 // Deserializza la stringa JSON in un oggetto UserResponse
                 UserResponse userResponse = JsonConvert.DeserializeObject<UserResponse>(jsonResponse);
 
+                // Aggiungi l'età randomica per ciascun utente
+                Random random = new Random();
+                foreach (User user in userResponse.Results)
+                {
+                    // Genera un'età randomica compresa tra 18 e 65
+                    user.Age = random.Next(18, 66);
+                }
+
                 // Stampa i dati di ciascun utente
                 int index = 0;
                 foreach (User user in userResponse.Results)
@@ -36,6 +44,7 @@ class Program
                     Console.WriteLine($"     Email: {user.Email}");
                     Console.WriteLine($"     Nazione: {user.Location.Country}");
                     Console.WriteLine($"     Numero di telefono: {user.Phone}");
+                    Console.WriteLine($"     Età: {user.Age}");
                     Console.WriteLine($"     Immagine: {user.Picture.Large}");
                     Console.WriteLine("-----------------------------");
                 }
@@ -52,6 +61,7 @@ class Program
                     Console.WriteLine($"Email: {selectedUser.Email}");
                     Console.WriteLine($"Nazione: {selectedUser.Location.Country}");
                     Console.WriteLine($"Numero di telefono: {selectedUser.Phone}");
+                    Console.WriteLine($"Età: {selectedUser.Age}");
                     Console.WriteLine($"Immagine: {selectedUser.Picture.Large}");
 
                     GetAdditionalStatistics(userResponse.Results);
