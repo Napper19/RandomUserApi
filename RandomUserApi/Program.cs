@@ -148,7 +148,7 @@ class Program
             writer.WriteLine($"Immagine: {user.Picture.Large}");
         }
 
-        Console.WriteLine("Dati dell'utente salvati con successo!");
+        Console.WriteLine($"Dati dell'utente salvati con successo in: {filePath}");
     }
 }
 
