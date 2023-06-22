@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -35,9 +36,6 @@ class Program
                     user.Age = random.Next(18, 66);
                 }
 
-                // Ordina la lista degli utenti per nome
-                userResponse.Results = userResponse.Results.OrderBy(u => u.Name.First).ToList();
-
                 // Stampa i dati di ciascun utente
                 int index = 0;
                 foreach (User user in userResponse.Results)
@@ -68,6 +66,16 @@ class Program
                     Console.WriteLine($"Immagine: {selectedUser.Picture.Large}");
 
                     GetAdditionalStatistics(userResponse.Results);
+
+                    Console.Write("Vuoi salvare i dati dell'utente su file? (S/N): ");
+                    string responseSave = Console.ReadLine();
+
+                    if (responseSave.ToUpper() == "S")
+                    {
+                        string fileName = $"{selectedUser.Name.First}_{selectedUser.Name.Last}.txt";
+                        string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName);
+                        SaveUserToFile(selectedUser, filePath);
+                    }
                 }
                 else
                 {
@@ -126,6 +134,21 @@ class Program
         {
             Console.WriteLine($"{entry.Key}: {entry.Value}");
         }
+    }
+
+    static void SaveUserToFile(User user, string filePath)
+    {
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            writer.WriteLine($"Nome: {user.Name.First} {user.Name.Last}");
+            writer.WriteLine($"Email: {user.Email}");
+            writer.WriteLine($"Nazione: {user.Location.Country}");
+            writer.WriteLine($"Numero di telefono: {user.Phone}");
+            writer.WriteLine($"Età: {user.Age}");
+            writer.WriteLine($"Immagine: {user.Picture.Large}");
+        }
+
+        Console.WriteLine("Dati dell'utente salvati con successo!");
     }
 }
 
